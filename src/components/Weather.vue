@@ -8,40 +8,40 @@ const router = useRouter();
 const tiles = [
   {
     type: 'sunny',
-    image: '/img/bg_sunny-1.png',
+    image: '/la/img/bg_sunny-1.png',
     title: '맑음',
     description: ['맑은 날, 산뜻함을 더해줄', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'cloudy',
-    image: '/img/bg_cloudy.png',
+    image: '/la/img/bg_cloudy.png',
     title: '흐림',
     description: ['흐린 날, 기분 전환해줄', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'rainy',
-    image: '/img/bg_rainy.png',
+    image: '/la/img/bg_rainy.png',
     title: '비',
     description: ['습기와 꿉꿉함을 날려줄', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'snowy',
-    image: '/img/bg_snowy.png',
+    image: '/la/img/bg_snowy.png',
     title: '눈',
     description: ['새하얀 눈과 어울리는', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'empty',
-    image: '/img/bg_sunny-2.png',
+    image: '/la/img/bg_sunny-2.png',
     clickable: true
   },
   {
     type: 'event',
-    image: '/img/bg_event.png',
+    image: '/la/img/bg_event.png',
     title: '이벤트',
     description: ['(무드앤)의 이벤트 소식', '확인하러 가기'],
     clickable: true

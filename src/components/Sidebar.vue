@@ -1,10 +1,13 @@
 <script setup>
 import './css/sidebar.css'
 import { ref, computed, watch } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+
+// base 경로 자동 처리 (GitHub Pages 대응)
+const base = import.meta.env.BASE_URL
 
 const currentPath = ref(route.path)
 
@@ -23,9 +26,7 @@ const icons = [
 ]
 
 function isActive(icon) {
-  // weatherType 기반 경로
   const pathMatch = route.params.weatherType === icon.type
-  // 또는 직접 경로 기반 (best 포함)
   const pathExact = route.path === icon.path
   return pathMatch || pathExact
 }
@@ -37,7 +38,7 @@ function isActive(icon) {
       <router-link to="/">
         <!-- 이벤트일 때 로고 이미지 변경 -->
         <img
-          :src="isEventPage ? '/img/event-logo.png' : '/img/wlogo.png'"
+          :src="isEventPage ? base + 'img/event-logo.png' : base + 'img/wlogo.png'"
           alt="로고"
           class="logo"
         />
