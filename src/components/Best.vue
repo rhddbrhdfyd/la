@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import {bestMap} from './js/bestDataMap.js'
 import { ref, computed, nextTick, watch } from 'vue'
 
+const base = import.meta.env.BASE_URL
 const showPopup = ref(false)
 const selectedIndex = ref(null)
 
@@ -24,8 +25,7 @@ function getEventY(e) {
   return e.touches ? e.touches[0].clientY : e.clientY
 }
 
-const activeImage = ref('') // 현재 크게 보여줄 이미지
-
+const activeImage = ref('')
 watch(selectedIndex, (newIndex) => {
   const item = bestMap[newIndex]
   if (item && item.main?.colors?.length > 0) {
@@ -53,39 +53,6 @@ function openPopup(index) {
   })
 }
 
-// 팝업 드래그 -----------------------------------------------------------------------
-function startDrag(e) {
-  dragging = true;
-  startY = getEventY(e); // 정확한 시작 위치 기록
-}
-
-function onDrag(e) {
-  if (!dragging || !popupRef.value) return;
-
-  const moveY = getEventY(e) - startY;
-
-  // 드래그 이동 제한: -100 ~ +100px
-  const maxOffset = 100;
-  const offsetY = Math.max(-maxOffset, Math.min(maxOffset, moveY));
-
-  currentY = offsetY;
-  popupRef.value.style.transform = `translateY(${currentY}px)`;
-}
-
-function endDrag() {
-  dragging = false;
-
-  if (popupRef.value) {
-    popupRef.value.style.transition = 'transform 0.2s ease';
-    popupRef.value.style.transform = 'translateY(0px)';
-    currentY = 0;
-
-    setTimeout(() => {
-      popupRef.value.style.transition = '';
-    }, 200);
-  }
-}
-
 const scrollRef = ref(null)
 let isDraggingScroll = false
 let scrollStartY = 0
@@ -93,13 +60,13 @@ let scrollTopAtStart = 0
 
 function onScrollDragStart(e) {
   isDraggingScroll = true
-  scrollStartY = e.touches ? e.touches[0].clientY : e.clientY
+  scrollStartY = getEventY(e)
   scrollTopAtStart = scrollRef.value.scrollTop
 }
 
 function onScrollDragMove(e) {
   if (!isDraggingScroll || !scrollRef.value) return
-  const currentY = e.touches ? e.touches[0].clientY : e.clientY
+  const currentY = getEventY(e)
   const deltaY = scrollStartY - currentY
   scrollRef.value.scrollTop = scrollTopAtStart + deltaY
 }
@@ -108,8 +75,6 @@ function onScrollDragEnd() {
   isDraggingScroll = false
 }
 
-
-//뒤로가기 버튼 -----------------------------------------------------------------------
 const router = useRouter()
 
 function goBackOrHome() {
@@ -148,17 +113,17 @@ function goBackOrHome() {
                   <h3>{{ currentItem.main.brand }}</h3>
                   <p>{{ currentItem.main.name }}</p>
                   <p>{{ currentItem.main.price }}</p>
-                  <!-- 큰 이미지 -->
                   <div class="main-img">
-                    <img img :src="activeImage" :alt="activeColorName"/>
+                    <img :src="base + activeImage" :alt="activeColorName" />
                   </div>
                   <div class="p-dot">
-                    <span v-for="color in currentItem.main.colors"
+                    <span
+                      v-for="color in currentItem.main.colors"
                       :key="color.id"
                       class="color-dot"
                       :style="{ backgroundColor: color.colorCode }"
-                      @click="activeImage = color.image; activeColorName = color.name">
-                    </span>
+                      @click="activeImage = color.image; activeColorName = color.name"
+                    ></span>
                   </div>
                   <p class="active-color">Color : {{ activeColorName }}</p>
                   <p class="m-desc">{{ currentItem.main.desc }}</p>
@@ -166,7 +131,6 @@ function goBackOrHome() {
                     <button class="c-btn c-btn1">구매하기</button>
                     <button class="c-btn c-btn2">장바구니</button>
                   </div>
-                  <!-- 썸네일 목록 -->
                   <div class="c-thumbs">
                     <div
                       v-for="color in currentItem.main.colors"
@@ -174,7 +138,7 @@ function goBackOrHome() {
                       class="thumb-block"
                     >
                       <img
-                        :src="color.image"
+                        :src="base + color.image"
                         :alt="color.name"
                         class="thumb"
                         @click="activeImage = color.image; activeColorName = color.name"
@@ -182,7 +146,7 @@ function goBackOrHome() {
                     </div>
                   </div>
                 </div>
-                <!-- 관련 상품 텍스트 정보 -->
+
                 <div class="p-bottom">
                   <div class="r-items">
                     <div
@@ -190,9 +154,9 @@ function goBackOrHome() {
                       :key="rel.id"
                       class="r-info"
                     >
-                    <div class="r-box">
-                      <img :src="rel.image" :alt="rel.name">
-                    </div>
+                      <div class="r-box">
+                        <img :src="base + rel.image" :alt="rel.name" />
+                      </div>
                       <p>{{ rel.brand }}</p>
                       <p>{{ rel.name }}</p>
                       <p>{{ rel.price }}</p>
@@ -203,10 +167,10 @@ function goBackOrHome() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </div> <!-- p-content -->
+            </div> <!-- p-main -->
+          </div> <!-- p-inner -->
+        </div> <!-- p-wrap -->
       </div>
     </div>
   </section>
