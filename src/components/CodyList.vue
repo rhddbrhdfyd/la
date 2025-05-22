@@ -9,6 +9,8 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import '@splidejs/vue-splide/css'
 import { ref, onMounted, nextTick, computed } from 'vue'
 
+const base = import.meta.env.BASE_URL
+
 const route = useRoute();
 const weatherType = route.params.weatherType || 'rainy';
 const weatherData = weatherMap[weatherType];
@@ -32,6 +34,7 @@ onMounted(() => {
     })
   })
 })
+
 const groupedItems = computed(() => {
   const groups = []
   for (let i = 0; i < itemList.value.length; i += 2) {
@@ -71,39 +74,35 @@ onMounted(async () => {
   gsap.registerPlugin(ScrollTrigger)
 
   const pinEl   = pinWrapRef.value
-const innerEl = innerRef.value
+  const innerEl = innerRef.value
+  const pinH     = pinEl.clientHeight
+  const contentH = innerEl.scrollHeight
+  const extra = 100;
+  const distance = contentH - pinH + extra;
 
-const pinH     = pinEl.clientHeight
-const contentH = innerEl.scrollHeight
-const extra = 100;
-const distance = innerEl.scrollHeight - pinEl.clientHeight + extra;
-
-// pin 설정
-ScrollTrigger.create({
-  trigger: "#detail",
-  start: "top top",
-  end: `+=${distance}`,
-  pin: true,
-  scrub: true,
-})
-
-// 내부 스크롤 애니메이션
-gsap.to(innerEl, {
-  y: -distance,
-  ease: "none",
-  scrollTrigger: {
+  ScrollTrigger.create({
     trigger: "#detail",
     start: "top top",
     end: `+=${distance}`,
+    pin: true,
     scrub: true,
-  },
-})
+  })
 
-  // 리소스 로드(이미지, 글꼴 등) 끝난 뒤에도 한 번 더
+  gsap.to(innerEl, {
+    y: -distance,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#detail",
+      start: "top top",
+      end: `+=${distance}`,
+      scrub: true,
+    },
+  })
+
   window.addEventListener('load', () => ScrollTrigger.refresh())
 })
 
-//뒤로가기 버튼 -----------------------------------------------------------------------
+// 뒤로가기 버튼 -----------------------------------------------------------------------
 const router = useRouter()
 
 function goBackOrHome() {
@@ -113,7 +112,6 @@ function goBackOrHome() {
     router.push('/')
   }
 }
-
 </script>
 
 <template>
@@ -128,25 +126,26 @@ function goBackOrHome() {
               class="s-card"
             >
               <div class="c-img-box">
-                <img :src="select.image" alt="" class="c-image" />
+                <img :src="base + select.image" alt="" class="c-image" />
               </div>
               <p class="cody-desc">{{ select.desc }}</p>
             </div>
           </div>
-
         </div>
 
         <div class="cody-right" :class="['page', 'theme', weatherType]">
           <h3 class="a-title">날씨 따라 즐기는 하루</h3>
-          <ul class="a-lists">           <li v-for="(a, i) in weatherData.activities" :key="i" class="a-list">
-            <h4>{{ a.title }}</h4>
-            <p>{{ a.desc }}</p>
+          <ul class="a-lists">
+            <li v-for="(a, i) in weatherData.activities" :key="i" class="a-list">
+              <h4>{{ a.title }}</h4>
+              <p>{{ a.desc }}</p>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </section>
+
   <section id="detail" ref="detailRef">
     <div class="d-wrap">
       <div class="pin-wrap" ref="pinWrapRef">
@@ -157,9 +156,12 @@ function goBackOrHome() {
             :key="cody.id"
           >
             <div class="s-img-box">
-              <img class="s-image" :src="detailImages.find(d => d.group === cody.group)?.image"  alt="" />
+              <img
+                class="s-image"
+                :src="base + (detailImages.find(d => d.group === cody.group)?.image || '')"
+                alt=""
+              />
             </div>
-            <!-- 하단 아이템 리스트 -->
             <div class="d-card">
               <ul class="d-lists">
                 <li
@@ -168,7 +170,7 @@ function goBackOrHome() {
                   class="d-list"
                 >
                   <div class="d-thumb-box">
-                    <img :src="item.image" :alt="item.brand + ' 제품 이미지'" class="d-thumb" />
+                    <img :src="base + item.image" :alt="item.brand + ' 제품 이미지'" class="d-thumb" />
                   </div>
                   <div class="d-text">
                     <strong>{{ item.brand }}</strong>
@@ -183,56 +185,58 @@ function goBackOrHome() {
             </div>
           </div>
         </div>
-        <div class="side" :style="{ backgroundImage: `url(/img/side-${weatherType}.jpg)` }"></div>
+        <div class="side" :style="{ backgroundImage: `url(${base}img/side-${weatherType}.jpg)` }"></div>
       </div>
     </div>
   </section>
+
   <section id="item">
     <div class="wrap flex">
       <div class="i-layout">
         <div class="i-main">
-          <img :src="weatherData.select[0].image" alt="" class="i-image" />
+          <img :src="base + weatherData.select[0].image" alt="" class="i-image" />
         </div>
 
-      <div class="i-box" v-if="showSwiper">
-        <Splide
-          :options="{
-            perPage: 2,
-            type: 'slide', // loop이 필요 없으면 slide로도 가능
-            gap: '20px',
-            arrows: false, // 좌우 화살표 보여줄지 여부
-            pagination: false, // 아래 dot 표시
-            drag: true,
-            autoplay: false,  // 자동 넘김 비활성화
-          }"
-        aria-label="추천 아이템 슬라이더">
-          <SplideSlide v-for="(group, i) in groupedSlide" :key="i">
-            <div class="vertical-group">
-              <div v-for="slide in group" :key="slide.id" class="i-card">
-                <div class="i-thumb-box">
-                  <img :src="slide.image" class="i-thumb" :alt="slide.brand + ' 제품 이미지'" />
-                </div>
-                <div class="i-info">
-                  <strong>{{ slide.brand }}</strong>
-                  <p>{{ slide.desc }}</p>
-                  <p>{{ slide.price }}</p>
-                  <div class="i-dot">
+        <div class="i-box" v-if="showSwiper">
+          <Splide
+            :options="{
+              perPage: 2,
+              type: 'slide',
+              gap: '20px',
+              arrows: false,
+              pagination: false,
+              drag: true,
+              autoplay: false,
+            }"
+            aria-label="추천 아이템 슬라이더"
+          >
+            <SplideSlide v-for="(group, i) in groupedSlide" :key="i">
+              <div class="vertical-group">
+                <div v-for="slide in group" :key="slide.id" class="i-card">
+                  <div class="i-thumb-box">
+                    <img :src="base + slide.image" class="i-thumb" :alt="slide.brand + ' 제품 이미지'" />
+                  </div>
+                  <div class="i-info">
+                    <strong>{{ slide.brand }}</strong>
+                    <p>{{ slide.desc }}</p>
+                    <p>{{ slide.price }}</p>
+                    <div class="i-dot">
                       <span class="color-dot" :style="{ backgroundColor: slide.colorCode }"></span>
                       <p>Color : {{ slide.color }}</p>
                     </div>
-                  <span>
-                    <button>구매하기</button>
-                    <button>장바구니</button>
-                  </span>
+                    <span>
+                      <button>구매하기</button>
+                      <button>장바구니</button>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </SplideSlide>
-        </Splide>
-      </div>
-
+            </SplideSlide>
+          </Splide>
+        </div>
       </div>
     </div>
   </section>
+
   <button class="back" @click="goBackOrHome">뒤로가기</button>
 </template>

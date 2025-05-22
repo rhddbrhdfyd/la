@@ -3,6 +3,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { weatherMap } from './js/weatherDataMap.js';
 import './css/codyDetail.css';
 
+const base = import.meta.env.BASE_URL;
+
 const route = useRoute();
 const router = useRouter();
 
@@ -26,7 +28,7 @@ console.log('items:', items);
           :key="cody.id"
         >
           <img
-            :src="cody.image"
+            :src="base + cody.image"
             alt="코디 대표 이미지"
             class="s-image"
           />
@@ -39,7 +41,7 @@ console.log('items:', items);
                 :key="item.id"
                 class="d-list"
               >
-                <img :src="item.image" alt="아이템 이미지" class="d-thumb" />
+                <img :src="base + item.image" alt="아이템 이미지" class="d-thumb" />
                 <div class="d-text">
                   <strong>{{ item.brand }}</strong><br />
                   {{ item.desc }}
