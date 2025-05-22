@@ -38,7 +38,7 @@ function isActive(icon) {
       <router-link to="/">
         <!-- 이벤트일 때 로고 이미지 변경 -->
         <img
-          :src="isEventPage ? base + 'img/event-logo.png' : base + 'img/wlogo.png'"
+          :src="isEventPage ? '/img/event-logo.png' : '/img/wlogo.png'"
           alt="로고"
           class="logo"
         />

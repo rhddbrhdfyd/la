@@ -126,7 +126,7 @@ function goBackOrHome() {
               class="s-card"
             >
               <div class="c-img-box">
-                <img :src="base + select.image" alt="" class="c-image" />
+                <img :src=" select.image" alt="" class="c-image" />
               </div>
               <p class="cody-desc">{{ select.desc }}</p>
             </div>
@@ -158,7 +158,7 @@ function goBackOrHome() {
             <div class="s-img-box">
               <img
                 class="s-image"
-                :src="base + (detailImages.find(d => d.group === cody.group)?.image || '')"
+                :src=" (detailImages.find(d => d.group === cody.group)?.image || '')"
                 alt=""
               />
             </div>
@@ -170,7 +170,7 @@ function goBackOrHome() {
                   class="d-list"
                 >
                   <div class="d-thumb-box">
-                    <img :src="base + item.image" :alt="item.brand + ' 제품 이미지'" class="d-thumb" />
+                    <img :src=" item.image" :alt="item.brand + ' 제품 이미지'" class="d-thumb" />
                   </div>
                   <div class="d-text">
                     <strong>{{ item.brand }}</strong>
@@ -185,7 +185,7 @@ function goBackOrHome() {
             </div>
           </div>
         </div>
-        <div class="side" :style="{ backgroundImage: `url(${base}img/side-${weatherType}.jpg)` }"></div>
+          <div class="side" :style="{ backgroundImage: `url(/img/side-${weatherType}.jpg)` }"></div>
       </div>
     </div>
   </section>
@@ -194,7 +194,7 @@ function goBackOrHome() {
     <div class="wrap flex">
       <div class="i-layout">
         <div class="i-main">
-          <img :src="base + weatherData.select[0].image" alt="" class="i-image" />
+          <img :src=" weatherData.select[0].image" alt="" class="i-image" />
         </div>
 
         <div class="i-box" v-if="showSwiper">
@@ -214,7 +214,7 @@ function goBackOrHome() {
               <div class="vertical-group">
                 <div v-for="slide in group" :key="slide.id" class="i-card">
                   <div class="i-thumb-box">
-                    <img :src="base + slide.image" class="i-thumb" :alt="slide.brand + ' 제품 이미지'" />
+                    <img :src=" slide.image" class="i-thumb" :alt="slide.brand + ' 제품 이미지'" />
                   </div>
                   <div class="i-info">
                     <strong>{{ slide.brand }}</strong>

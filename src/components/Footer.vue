@@ -18,8 +18,8 @@ const base = import.meta.env.BASE_URL
       <div class="footer-left">
         <img
           :src="isEventPage
-            ? base + 'img/event-footer-logo.png'
-            : base + 'img/footer-logo.png'"
+            ? '/img/event-footer-logo.png'
+            : '/img/footer-logo.png'"
           alt="로고"
           class="logo"
         />
@@ -38,8 +38,8 @@ const base = import.meta.env.BASE_URL
         <a href="https://github.com/" target="_blank">
           <img
             :src="isEventPage
-              ? base + 'img/svg/event-github.svg'
-              : base + 'img/svg/github.svg'"
+              ? '/img/svg/event-github.svg'
+              : '/img/svg/github.svg'"
             alt="GitHub 아이콘"
             class="icon"
           />
@@ -47,8 +47,8 @@ const base = import.meta.env.BASE_URL
         <a href="https://figma.com/" target="_blank">
           <img
             :src="isEventPage
-              ? base + 'img/svg/event-figma.svg'
-              : base + 'img/svg/figma.svg'"
+              ? '/img/svg/event-figma.svg'
+              : '/img/svg/figma.svg'"
             alt="Figma 아이콘"
             class="icon"
           />
@@ -57,3 +57,4 @@ const base = import.meta.env.BASE_URL
     </div>
   </footer>
 </template>
+

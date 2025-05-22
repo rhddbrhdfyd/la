@@ -17,17 +17,17 @@ const isEventPage = computed(() => route.path === '/event')
     <div class="wrap flex">
       <div class="nav-right">
         <img
-          :src="isEventPage ? base + 'img/event-my.png' : base + 'img/my.png'"
+          :src="isEventPage ? '/img/event-my.png' : '/img/my.png'"
           alt="유저 아이콘"
           class="icon"
         />
         <img
-          :src="isEventPage ? base + 'img/event-bag.png' : base + 'img/bag.png'"
+          :src="isEventPage ? '/img/event-bag.png' : '/img/bag.png'"
           alt="장바구니"
           class="icon"
         />
         <img
-          :src="isEventPage ? base + 'img/event-hamburger.png' : base + 'img/hamburger.png'"
+          :src="isEventPage ? '/img/event-hamburger.png' : '/img/hamburger.png'"
           alt="햄버거 아이콘"
           class="icon"
         />
@@ -35,3 +35,4 @@ const isEventPage = computed(() => route.path === '/event')
     </div>
   </header>
 </template>
+

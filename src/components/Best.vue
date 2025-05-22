@@ -114,7 +114,7 @@ function goBackOrHome() {
                   <p>{{ currentItem.main.name }}</p>
                   <p>{{ currentItem.main.price }}</p>
                   <div class="main-img">
-                    <img :src="base + activeImage" :alt="activeColorName" />
+                    <img :src=" activeImage" :alt="activeColorName" />
                   </div>
                   <div class="p-dot">
                     <span
@@ -138,7 +138,7 @@ function goBackOrHome() {
                       class="thumb-block"
                     >
                       <img
-                        :src="base + color.image"
+                        :src=" color.image"
                         :alt="color.name"
                         class="thumb"
                         @click="activeImage = color.image; activeColorName = color.name"
@@ -155,7 +155,7 @@ function goBackOrHome() {
                       class="r-info"
                     >
                       <div class="r-box">
-                        <img :src="base + rel.image" :alt="rel.name" />
+                        <img :src=" rel.image" :alt="rel.name" />
                       </div>
                       <p>{{ rel.brand }}</p>
                       <p>{{ rel.name }}</p>

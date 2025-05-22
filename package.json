@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@splidejs/vue-splide": "^0.6.12",
+    "firebase": "^11.8.1",
     "gsap": "^3.13.0",
     "pinia": "^3.0.2",
     "swiper": "^11.2.6",

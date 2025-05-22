@@ -1,61 +1,82 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref } from 'vue'
+import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore'
+import { db } from '@/firebase'
 import { Calendar } from 'v-calendar';
 import Sidebar from './Sidebar.vue'
 
 const router = useRouter();
+const userId = 'user123';
 
 const tiles = [
   {
     type: 'sunny',
-    image: '/la/img/bg_sunny-1.png',
+    image: '/img/bg_sunny-1.png',
     title: '맑음',
     description: ['맑은 날, 산뜻함을 더해줄', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'cloudy',
-    image: '/la/img/bg_cloudy.png',
+    image: '/img/bg_cloudy.png',
     title: '흐림',
     description: ['흐린 날, 기분 전환해줄', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'rainy',
-    image: '/la/img/bg_rainy.png',
+    image: '/img/bg_rainy.png',
     title: '비',
     description: ['습기와 꿉꿉함을 날려줄', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'snowy',
-    image: '/la/img/bg_snowy.png',
+    image: '/img/bg_snowy.png',
     title: '눈',
     description: ['새하얀 눈과 어울리는', '추천템 확인하기'],
     clickable: true
   },
   {
     type: 'empty',
-    image: '/la/img/bg_sunny-2.png',
+    image: '/img/bg_sunny-2.png',
     clickable: true
   },
   {
     type: 'event',
-    image: '/la/img/bg_event.png',
+    image: '/img/bg_event.png',
     title: '이벤트',
     description: ['(무드앤)의 이벤트 소식', '확인하러 가기'],
     clickable: true
   },
 ];
 
-function goToWeather(type) {
+async function recordWeatherClick(type) {
+  const statsRef = doc(db, 'userPreferences', 'weatherStats')
+  const favRef = doc(db, 'favorites', userId)
+  const snap = await getDoc(statsRef)
+
+  if (!snap.exists()) {
+    await setDoc(statsRef, { sunny: 0, cloudy: 0, rainy: 0, snowy: 0 })
+  }
+
+  if (['sunny', 'cloudy', 'rainy', 'snowy'].includes(type)) {
+    await updateDoc(statsRef, {
+      [type]: increment(1)
+    })
+    await setDoc(favRef, { favoriteWeather: type }, { merge: true })
+  }
+}
+
+function handleTileClick(type) {
+  recordWeatherClick(type)
   if (type === 'event') {
     router.push('/event');
   } else {
     router.push(`/${type}`);
   }
 }
-import { ref } from 'vue';
 
 const calendarMarks = ref([
   {
@@ -84,7 +105,7 @@ const calendarMarks = ref([
           v-for="tile in tiles"
           :key="tile.type"
           class="tile"
-          @click="goToWeather(tile.type)"
+          @click="handleTileClick(tile.type)"
         >
           <div class="tile-box">
             <img :src="tile.image" :alt="tile.title" class="tile-img" />
@@ -92,16 +113,15 @@ const calendarMarks = ref([
           <div class="tile-content">
             <h2 class="tile-title">{{ tile.title }}</h2>
             <p><span v-for="(line, idx) in tile.description" :key="idx">{{ line }}<br /></span></p>
-
           </div>
         </div>
         <div class="calendar-box">
-        <Calendar
-    mode="month"
-    is-expanded
-    :attributes="calendarMarks"
-    style="width: 342px; height: 342px;"
-      />
+          <Calendar
+            mode="month"
+            is-expanded
+            :attributes="calendarMarks"
+            style="width: 342px; height: 342px;"
+          />
         </div>
       </div>
     </div>

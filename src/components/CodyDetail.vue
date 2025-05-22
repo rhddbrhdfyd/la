@@ -28,7 +28,7 @@ console.log('items:', items);
           :key="cody.id"
         >
           <img
-            :src="base + cody.image"
+            :src=" cody.image"
             alt="코디 대표 이미지"
             class="s-image"
           />
@@ -41,7 +41,7 @@ console.log('items:', items);
                 :key="item.id"
                 class="d-list"
               >
-                <img :src="base + item.image" alt="아이템 이미지" class="d-thumb" />
+                <img :src=" item.image" alt="아이템 이미지" class="d-thumb" />
                 <div class="d-text">
                   <strong>{{ item.brand }}</strong><br />
                   {{ item.desc }}

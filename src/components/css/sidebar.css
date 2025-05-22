@@ -47,27 +47,27 @@
   background-repeat: no-repeat;
 }
 
-.s-icon1{background-image: url('/la/img/sunny.png')}
+.s-icon1{background-image: url('/img/sunny.png')}
 
-.s-icon2{background-image: url('/la/img/cloudy.png');}
+.s-icon2{background-image: url('/img/cloudy.png');}
 
-.s-icon3{background-image: url('/la/img/rainy.png');}
+.s-icon3{background-image: url('/img/rainy.png');}
 
-.s-icon4{background-image: url('/la/img/snowy.png');}
+.s-icon4{background-image: url('/img/snowy.png');}
 
-.s-icon5{background-image: url('/la/img/best.png');}
+.s-icon5{background-image: url('/img/best.png');}
 
 /* 아이콘 클릭했을때 이미지 */
 
-.s-icon1.active { background-image: url('/la/img/sunny_active.png'); }
+.s-icon1.active { background-image: url('/img/sunny_active.png'); }
 
-.s-icon2.active { background-image: url('/la/img/cloudy_active.png'); }
+.s-icon2.active { background-image: url('/img/cloudy_active.png'); }
 
-.s-icon3.active { background-image: url('/la/img/rainy_active.png'); }
+.s-icon3.active { background-image: url('/img/rainy_active.png'); }
 
-.s-icon4.active { background-image: url('/la/img/snowy_active.png'); }
+.s-icon4.active { background-image: url('/img/snowy_active.png'); }
 
-.s-icon5.active { background-image: url('/la/img/best_active.png'); }
+.s-icon5.active { background-image: url('/img/best_active.png'); }
 
 #side .side-icon a {
   width: 100%;
@@ -93,11 +93,11 @@
 }
 
 /* 이벤트 페이지 전용 아이콘 이미지 */
-.s-icon1.event-icon { background-image: url('/la/img/event-sunny.png'); }
-.s-icon2.event-icon { background-image: url('/la/img/event-cloudy.png'); }
-.s-icon3.event-icon { background-image: url('/la/img/event-rainy.png'); }
-.s-icon4.event-icon { background-image: url('/la/img/event-snowy.png'); }
-.s-icon5.event-icon { background-image: url('/la/img/event-best.png'); }
+.s-icon1.event-icon { background-image: url('/img/event-sunny.png'); }
+.s-icon2.event-icon { background-image: url('/img/event-cloudy.png'); }
+.s-icon3.event-icon { background-image: url('/img/event-rainy.png'); }
+.s-icon4.event-icon { background-image: url('/img/event-snowy.png'); }
+.s-icon5.event-icon { background-image: url('/img/event-best.png'); }
 
 #side.event .side-icon a {
   background-color: #29328D;
