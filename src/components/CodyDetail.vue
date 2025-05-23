@@ -1,23 +1,3 @@
-<script setup>
-import { useRoute, useRouter } from 'vue-router';
-import { weatherMap } from './js/weatherDataMap.js';
-import './css/codyDetail.css';
-
-const base = import.meta.env.BASE_URL;
-
-const route = useRoute();
-const router = useRouter();
-
-const weatherType = route.params.weatherType;
-const weatherData = weatherMap[weatherType];
-
-const codys = weatherData.cody;
-const items = weatherData.items;
-
-console.log('codys:', codys);
-console.log('items:', items);
-</script>
-
 <template>
   <section id="detail">
     <div class="wrap">
@@ -28,7 +8,7 @@ console.log('items:', items);
           :key="cody.id"
         >
           <img
-            :src=" cody.image"
+            :src="cody.image"
             alt="코디 대표 이미지"
             class="s-image"
           />
@@ -38,10 +18,12 @@ console.log('items:', items);
             <ul class="d-lists">
               <li
                 v-for="item in items.filter(i => i.group === cody.group)"
-                :key="item.id"
+                :key="item.id + '-' + weatherType"
                 class="d-list"
+                @click="handleProductClick(item)"
+                style="cursor: pointer"
               >
-                <img :src=" item.image" alt="아이템 이미지" class="d-thumb" />
+                <img :src="item.image" alt="아이템 이미지" class="d-thumb" />
                 <div class="d-text">
                   <strong>{{ item.brand }}</strong><br />
                   {{ item.desc }}
@@ -54,3 +36,35 @@ console.log('items:', items);
     </div>
   </section>
 </template>
+
+<script setup>
+import { useRoute } from 'vue-router'
+import { weatherMap } from './js/weatherDataMap.js';
+import { recentViewed } from '../stores/recentViewed.js'
+import './css/codyDetail.css';
+
+const route = useRoute();
+const base = import.meta.env.BASE_URL;
+
+const weatherType = route.params.weatherType;
+const weatherData = weatherMap[weatherType];
+
+const codys = weatherData.cody;
+const items = weatherData.items;
+
+function handleProductClick(product) {
+  const viewed = JSON.parse(localStorage.getItem('recentViewed')) || []
+
+  const productWithFullImage = {
+    ...product,
+    image: product.image.startsWith('http') ? product.image : base + product.image,
+    _key: `${product.id}-${weatherType}`
+  }
+
+  viewed.unshift(productWithFullImage)
+  const unique = Array.from(new Map(viewed.map(p => [p._key, p])).values())
+  const sliced = unique.slice(0, 5)
+  localStorage.setItem('recentViewed', JSON.stringify(sliced))
+  recentViewed.value = sliced
+}
+</script>

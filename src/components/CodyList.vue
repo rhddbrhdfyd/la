@@ -1,119 +1,3 @@
-<script setup>
-import { useRoute, useRouter } from 'vue-router'
-import { weatherMap } from './js/weatherDataMap.js';
-import './css/codyList.css';
-import './css/codyDetail.css';
-import './css/itemList.css';
-
-import { Splide, SplideSlide } from '@splidejs/vue-splide'
-import '@splidejs/vue-splide/css'
-import { ref, onMounted, nextTick, computed } from 'vue'
-
-const base = import.meta.env.BASE_URL
-
-const route = useRoute();
-const weatherType = route.params.weatherType || 'rainy';
-const weatherData = weatherMap[weatherType];
-
-const codys = weatherData.cody;
-const items = weatherData.items;
-const items2 = weatherData.items2;
-const select = weatherData.select?.[0]?.image
-const detailImages = weatherData.detail || [];
-
-const itemList = ref([])
-const swiperRef = ref()
-const showSwiper = ref(false)
-
-onMounted(() => {
-  itemList.value = weatherMap[weatherType]?.items || []
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      showSwiper.value = true
-    })
-  })
-})
-
-const groupedItems = computed(() => {
-  const groups = []
-  for (let i = 0; i < itemList.value.length; i += 2) {
-    groups.push(items.value.slice(i, i + 2))
-  }
-  return groups
-})
-
-const slide = weatherData.slide;
-
-const groupedSlide = computed(() => {
-  const groups = []
-  for (let i = 0; i < slide.length; i += 2) {
-    groups.push(slide.slice(i, i + 2))
-  }
-  return groups
-})
-
-const weatherTypeLabel = {
-  rainy: '비 오는 날',
-  sunny: '화창한 날',
-  snowy: '눈 오는 날',
-  cloudy: '흐린 날',
-}[weatherType];
-
-// detail 스크롤 애니메이션 ----------------------------------------------------------
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-const pinWrapRef  = ref(null)
-const innerRef    = ref(null)
-
-gsap.registerPlugin(ScrollTrigger)
-
-onMounted(async () => {
-  await nextTick()
-  gsap.registerPlugin(ScrollTrigger)
-
-  const pinEl   = pinWrapRef.value
-  const innerEl = innerRef.value
-  const pinH     = pinEl.clientHeight
-  const contentH = innerEl.scrollHeight
-  const extra = 100;
-  const distance = contentH - pinH + extra;
-
-  ScrollTrigger.create({
-    trigger: "#detail",
-    start: "top top",
-    end: `+=${distance}`,
-    pin: true,
-    scrub: true,
-  })
-
-  gsap.to(innerEl, {
-    y: -distance,
-    ease: "none",
-    scrollTrigger: {
-      trigger: "#detail",
-      start: "top top",
-      end: `+=${distance}`,
-      scrub: true,
-    },
-  })
-
-  window.addEventListener('load', () => ScrollTrigger.refresh())
-})
-
-// 뒤로가기 버튼 -----------------------------------------------------------------------
-const router = useRouter()
-
-function goBackOrHome() {
-  if (window.history.length > 1) {
-    router.back()
-  } else {
-    router.push('/')
-  }
-}
-</script>
-
 <template>
   <section id="codylist">
     <div class="wrap">
@@ -166,11 +50,17 @@ function goBackOrHome() {
               <ul class="d-lists">
                 <li
                   v-for="item in items.filter(i => i.group === cody.group)"
-                  :key="item.id"
+                  :key="item.id + '-' + weatherType"
                   class="d-list"
+                  @click="handleProductClick(item)"
+                  style="cursor: pointer"
                 >
                   <div class="d-thumb-box">
-                    <img :src=" item.image" :alt="item.brand + ' 제품 이미지'" class="d-thumb" />
+                    <img
+                      :src=" item.image"
+                      :alt="item.brand + ' 제품 이미지'"
+                      class="d-thumb"
+                    />
                   </div>
                   <div class="d-text">
                     <strong>{{ item.brand }}</strong>
@@ -185,7 +75,7 @@ function goBackOrHome() {
             </div>
           </div>
         </div>
-          <div class="side" :style="{ backgroundImage: `url(/img/side-${weatherType}.jpg)` }"></div>
+        <div class="side" :style="{ backgroundImage: `url(/img/side-${weatherType}.jpg)` }"></div>
       </div>
     </div>
   </section>
@@ -212,7 +102,13 @@ function goBackOrHome() {
           >
             <SplideSlide v-for="(group, i) in groupedSlide" :key="i">
               <div class="vertical-group">
-                <div v-for="slide in group" :key="slide.id" class="i-card">
+                <div
+                  v-for="slide in group"
+                  :key="slide.id + '-' + weatherType"
+                  class="i-card"
+                  @click="handleProductClick(slide)"
+                  style="cursor: pointer"
+                >
                   <div class="i-thumb-box">
                     <img :src=" slide.image" class="i-thumb" :alt="slide.brand + ' 제품 이미지'" />
                   </div>
@@ -237,6 +133,142 @@ function goBackOrHome() {
       </div>
     </div>
   </section>
-
+  <RecentViewed />
   <button class="back" @click="goBackOrHome">뒤로가기</button>
 </template>
+
+<script setup>
+import { useRoute, useRouter } from 'vue-router'
+import { weatherMap } from './js/weatherDataMap.js';
+import { recentViewed } from '../stores/recentViewed.js'
+import RecentViewed from './RecentViewed.vue'
+import './css/codyList.css';
+import './css/codyDetail.css';
+import './css/itemList.css';
+
+import { Splide, SplideSlide } from '@splidejs/vue-splide'
+import '@splidejs/vue-splide/css'
+import { ref, onMounted, nextTick, computed } from 'vue'
+
+const base = import.meta.env.BASE_URL
+
+function handleProductClick(product) {
+  const viewed = JSON.parse(localStorage.getItem('recentViewed')) || []
+
+  const fullImage =
+    product.image.startsWith('http') ? product.image : base + product.image
+
+  const productWithFullImage = {
+    ...product,
+    image: fullImage,
+    _key: `${product.id}-${weatherType}`
+  }
+
+  viewed.unshift(productWithFullImage)
+  const unique = Array.from(new Map(viewed.map(p => [p._key, p])).values())
+  const sliced = unique.slice(0, 5)
+
+  localStorage.setItem('recentViewed', JSON.stringify(sliced))
+  recentViewed.value = sliced
+}
+
+const route = useRoute();
+const weatherType = route.params.weatherType || 'rainy';
+const weatherData = weatherMap[weatherType];
+
+const codys = weatherData.cody;
+const items = weatherData.items;
+const items2 = weatherData.items2;
+const select = weatherData.select?.[0]?.image
+const detailImages = weatherData.detail || [];
+
+const itemList = ref([])
+const swiperRef = ref()
+const showSwiper = ref(false)
+
+onMounted(() => {
+  itemList.value = weatherMap[weatherType]?.items || []
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      showSwiper.value = true
+    })
+  })
+})
+
+const groupedItems = computed(() => {
+  const groups = []
+  for (let i = 0; i < itemList.value.length; i += 2) {
+    groups.push(items.value.slice(i, i + 2))
+  }
+  return groups
+})
+
+const slide = weatherData.slide;
+
+const groupedSlide = computed(() => {
+  const groups = []
+  for (let i = 0; i < slide.length; i += 2) {
+    groups.push(slide.slice(i, i + 2))
+  }
+  return groups
+})
+
+const weatherTypeLabel = {
+  rainy: '비 오는 날',
+  sunny: '화창한 날',
+  snowy: '눈 오는 날',
+  cloudy: '흐린 날',
+}[weatherType];
+
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+const pinWrapRef  = ref(null)
+const innerRef    = ref(null)
+
+gsap.registerPlugin(ScrollTrigger)
+
+onMounted(async () => {
+  await nextTick()
+  gsap.registerPlugin(ScrollTrigger)
+
+  const pinEl   = pinWrapRef.value
+  const innerEl = innerRef.value
+  const pinH     = pinEl.clientHeight
+  const contentH = innerEl.scrollHeight
+  const extra = 100;
+  const distance = contentH - pinH + extra;
+
+  ScrollTrigger.create({
+    trigger: "#detail",
+    start: "top top",
+    end: `+=${distance}`,
+    pin: true,
+    scrub: true,
+  })
+
+  gsap.to(innerEl, {
+    y: -distance,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#detail",
+      start: "top top",
+      end: `+=${distance}`,
+      scrub: true,
+    },
+  })
+
+  window.addEventListener('load', () => ScrollTrigger.refresh())
+})
+
+const router = useRouter()
+
+function goBackOrHome() {
+  if (window.history.length > 1) {
+    router.back()
+  } else {
+    router.push('/')
+  }
+}
+</script>

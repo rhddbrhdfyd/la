@@ -20,9 +20,6 @@
     <Weather />
   </div>
 
-  <!-- 관심 기능들 -->
- <FavoriteSection />
-
   <BottomButton />
 </template>
 
@@ -31,8 +28,6 @@ import './css/main.css'
 import Weather from './Weather.vue'
 import Popup from './Popup.vue'
 import BottomButton from './BottomButton.vue'
-
-import FavoriteSection from './FavoriteSection.vue'
 
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
