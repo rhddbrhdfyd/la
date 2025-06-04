@@ -1,0 +1,42 @@
+<script setup>
+import './css/header.css'
+import { useRoute, useRouter } from 'vue-router'
+import { computed } from 'vue'
+
+// GitHub Pages 대응을 위한 base 경로
+const base = import.meta.env.BASE_URL
+const router = useRouter()
+const route = useRoute()
+
+// 정확히 "/event"일 때만 이벤트 페이지로 판단
+const isEventPage = computed(() => route.path === '/event')
+
+//404링크 -----------------------------------------------------------------------------
+function goTo(path) {
+  router.push(path)
+}
+</script>
+
+<template>
+  <header :class="['header', { 'event-header': isEventPage }]" id="header">
+    <div class="wrap flex">
+      <div class="nav-right">
+        <img
+          :src="isEventPage ? '/img/event-my.png' : '/img/my.png'"
+          alt="유저 아이콘"
+          class="icon"
+        />
+        <img
+          :src="isEventPage ? '/img/event-bag.png' : '/img/bag.png'"
+          alt="장바구니"
+          class="icon"
+        />
+        <img
+          :src="isEventPage ? '/img/event-hamburger.png' : '/img/hamburger.png'"
+          alt="햄버거 아이콘"
+          class="icon"
+        />
+      </div>
+    </div>
+  </header>
+</template>

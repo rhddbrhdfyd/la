@@ -1,0 +1,50 @@
+라우팅 경로
+/                                ← 메인
+├── /event                       ← 이벤트 전용 페이지
+├── /[weatherType]               ← 날씨별 콘텐츠 (코디/활동 목록)
+
+파일 경로
+src/
+├── App.vue                   ← 페이지 단위 컴포넌트
+├── components/
+│   ├── Home.vue              ← 홈
+│   ├── HeaderNav.vue         ← 헤더
+│   ├── BottomButton.vue      ← 하단 버튼
+│   ├── Weather.vue           ← 홈 하단 날씨+달력
+│   ├── Calendar.vue          ← 달력 내부 수정
+│   ├── Sidebar.vue           ← 사이드바
+│   ├── Popup.vue             ← 메인 팝업
+│   ├── Cody.vue              ← 코디 웹, 모바일 분기점
+│   ├── CodyList.vue          ← 코디3가지+아이템
+│   ├── CodyMobile.vue        ← 코디 모바일
+│   ├── Best.vue              ← 베스트 웹, 모바일 분기점
+│   ├── BestDesktop.vue       ← 베스트 웹
+│   ├── BestMobile.vue        ← 베스트 모바일
+│   ├── BestPage.vue          ← 베스트 모바일 상세페이지
+│   ├── Event.vue             ← 이벤트페이지
+│   ├── Scratch.vue           ← 스크래치
+│   ├── RecentViewed.vue      ← 방금 본 상품
+│   ├── Footer.vue            ← 푸터
+│   ├── css/
+│   │    ├── main.css
+│   │    ├── weather.css
+│   │    ├── sidebar.css
+│   │    ├── header.css
+│   │    ├── codyList.css
+│   │    ├── codyDetail.css
+│   │    ├── itemList.css
+│   │    ├── CodyMobile.css
+│   │    ├── best.css
+│   │    ├── bestMobile.css
+│   │    ├── bottomButton.css
+│   │    ├── event.css
+│   │    └── common.css
+│   └── js/
+│        ├── bestDataMap.js     ← 추천 아이템 데이터
+│        └── weatherDataMap.js  ← 코디,아이템 데이터
+│
+├── public/            ← 이미지 저장
+│   └── img/
+│        └── svg/
+├── router/
+│   └── index.js

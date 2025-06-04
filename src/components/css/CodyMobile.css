@@ -1,0 +1,220 @@
+#cody {
+  width: 100%;
+  height: auto;
+  margin-bottom: 50px;
+}
+#cody .m-wrap {
+  height: auto;
+  margin-top: 80px;
+}
+#cody .cody-list {}
+#cody .s-card {
+  position: relative;
+  width: 100%;
+}
+#cody .c-img-box {
+  width: 100%;
+  height: 540px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+#cody .c-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* 비율 유지 + 박스 꽉 채움 */
+  object-position: center; /* 중앙 기준으로 자름 */
+  display: block;
+}
+#cody .cody-desc {
+  position: absolute;
+  top: 400px;
+  left: 40px;
+  white-space: pre-line; /* \n 줄바꿈 적용 */
+  font-size: 22px;
+  line-height: 1.6;
+  color: white;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+  font-weight: bold;
+}
+#cody .d-card {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+#cody .d-lists {
+  padding-left: 0;
+}
+#cody .d-list {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+}
+#cody .d-thumb-box {
+  width: 85px;
+  height: 85px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+#cody .d-thumb {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+#cody .d-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#cody .d-thumb {
+  width: 100%;
+  cursor: pointer;
+}
+
+#cody .d-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#cody .d-text strong {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#cody .d-text p {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#cody .dot-box {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+#cody .color-dot {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+#cody .d-text div p {
+  font-size: 12px;
+}
+#cody .cody-right {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 50px 0;
+}
+#cody .a-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 70px;
+  margin-bottom: 45px;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+}
+#cody .a-title::after{
+  content: "";
+  display: block;
+  background-image: url(/img/thumbnail_cloudy-1.png);
+  width: 296px;
+  height: 72px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  z-index: -1;
+  transform: translateX(-50%);
+  left: 50%;
+}
+#cody .a-lists {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 296px;
+  gap: 35px;
+}
+#cody .a-list {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding-left: 30px;
+  color: #1E3A5F;
+}
+
+#cody .a-list::after{
+  content: "";
+  display: block;
+  width: 296px;
+  height: 72px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  z-index: -1;
+  border-radius: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#cody .a-list:nth-child(1):after,
+#cody .a-list:nth-child(3):after{
+  background-color: #B3C3D4;
+}
+#cody .a-list:nth-child(2):after,
+#cody .a-list:nth-child(4):after{
+  background-color: #D8E1EB;
+}
+
+#cody .a-list h4{
+  font-weight: 700;
+  font-size: 15px;
+}
+
+#cody .a-list p{
+  font-size: 14px;
+}
+
+@media (max-width: 480px){
+  #cody {
+    height: auto;
+    margin-bottom: 50px;
+  }
+#cody .m-wrap {}
+#cody .cody-list {}
+#cody .s-card {}
+#cody .c-img-box {
+  width: 100%;
+  height: 540px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+#cody .c-image {}
+#cody .cody-desc {}
+#cody .d-card {}
+#cody .d-lists {}
+#cody .d-list {}
+#cody .d-thumb-box {}
+#cody .d-thumb {}
+#cody .d-text {}
+#cody .color-dot {}
+#cody .cody-right {}
+#cody .a-title {}
+#cody .a-lists {}
+#cody .a-list p {
+  letter-spacing: -0.4px;
+}
+}

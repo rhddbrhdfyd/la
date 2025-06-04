@@ -1,0 +1,13 @@
+/main
+/rainy
+/cloudy
+/sunny
+/snowy
+/best
+/best/top
+/best/bottom
+/best/bag
+/best/Accessories
+/best/shoes
+/event
+/404-error
